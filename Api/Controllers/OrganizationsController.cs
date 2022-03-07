@@ -11,28 +11,49 @@ namespace Api.Controllers
         [HttpGet("{username}")]
         public ActionResult GetInfos(string username)
         {
-            Organization organization = Organization.InitalizeOrganizations(username).Result;
+            try
+            {
+                Organization organization = Organization.InitalizeOrganizations(username).Result;
 
-            return Ok(organization);
+                return Ok(organization);
+            }
+            catch (Exception)
+            {
+                return BadRequest(500);
+            }
+            
         }
 
 
         [HttpGet("repositories/{username}")]
         public ActionResult GetAllRepositories(string username)
         {
+            try
+            {
+                Organization organization = Organization.InitalizeOrganizations(username).Result;
 
-            Organization organization = Organization.InitalizeOrganizations(username).Result;
+                return Ok(organization.GetAllRepositories().Result);
 
-            return Ok(organization.GetAllRepositories().Result);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet("repositories/{username}/{languageType}/{num}")]
         public ActionResult GetRepositoriesType(string username, string languageType,int num) 
         {
+            try
+            {
+                Organization organization = Organization.InitalizeOrganizations(username).Result;
 
-            Organization organization = Organization.InitalizeOrganizations(username).Result;
-
-            return Ok(organization.repositories.GetRepositories(organization, languageType, num).Result);
+                return Ok(organization.repositories.GetRepositories(organization, languageType, num).Result);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
     }
 

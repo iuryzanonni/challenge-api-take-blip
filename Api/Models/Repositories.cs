@@ -52,9 +52,14 @@ namespace Api.Models
             }
             List<Repository> repositories = await GetAllRepositories(p_organization);
 
-            var r = repositories.Where(r => r.language == p_languageType).OrderBy( r => r.created_at).Take<Repository>(p_numRepository).ToList();
+            List<Repository> results = repositories.Where(r => r.language == p_languageType).OrderBy( r => r.created_at).Take<Repository>(p_numRepository).ToList();
 
-            return r;
+            foreach(Repository r in results)
+            {
+                r.avatar_url = p_organization.avatar_url;
+            }
+
+            return results;
         }
     }
 }
